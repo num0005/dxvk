@@ -54,20 +54,20 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: PDBs (x86)
-        path: build-msvc-x86\*.pdb
+        path: build-msvc-x86\**\*.pdb
     - name: Upload Executables
       uses: actions/upload-artifact@v2
       with:
         name: Executables (x86)
-        path: build-msvc-x86\*.dll
+        path: build-msvc-x86\**\*.dll
     - name: Upload artifacts (amd64)
       uses: actions/upload-artifact@v2
       with:
         name: PDBs (amd64)
-        path: build-msvc-x64\*.pdb
+        path: build-msvc-x64\**\*.pdb
     - name: Upload Executables
       uses: actions/upload-artifact@v2
       with:
         name: Executables (amd64)
-        path: build-msvc-x64\*.dll
+        path: build-msvc-x64\**\*.dll
 
