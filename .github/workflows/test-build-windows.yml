@@ -41,7 +41,18 @@ jobs:
           | % { [System.Environment]::SetEnvironmentVariable($_[0], $_[1]) }
         meson --buildtype release --backend vs2022 build-msvc-x86
         msbuild -m build-msvc-x86/dxvk.sln
-
+        
+    - name: Upload artifacts (x86)
+      uses: actions/upload-artifact@v3
+      with:
+        name: PDBs (x86)
+        path: build-msvc-x86\**\*.pdb
+    - name: Upload Executables
+      uses: actions/upload-artifact@v3
+      with:
+        name: Executables (x86)
+        path: build-msvc-x86\**\*.dll
+        
     - name: Build MSVC x64
       shell: pwsh
       run: |
@@ -50,23 +61,14 @@ jobs:
           | % { [System.Environment]::SetEnvironmentVariable($_[0], $_[1]) }
         meson --buildtype release --backend vs2022 build-msvc-x64
         msbuild -m build-msvc-x64/dxvk.sln
-    - name: Upload artifacts (x86)
-      uses: actions/upload-artifact@v2
-      with:
-        name: PDBs (x86)
-        path: build-msvc-x86\**\*.pdb
-    - name: Upload Executables
-      uses: actions/upload-artifact@v2
-      with:
-        name: Executables (x86)
-        path: build-msvc-x86\**\*.dll
+        
     - name: Upload artifacts (amd64)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: PDBs (amd64)
         path: build-msvc-x64\**\*.pdb
     - name: Upload Executables
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Executables (amd64)
         path: build-msvc-x64\**\*.dll
