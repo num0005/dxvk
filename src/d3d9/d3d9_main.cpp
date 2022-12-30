@@ -37,6 +37,8 @@ extern "C" {
     return dxvk::CreateD3D9(true, ppDirect3D9Ex);
   }
 
+  #define MAX_D3D9ON12_QUEUES        2
+
   typedef struct _D3D9ON12_ARGS
   {
     BOOL Enable9On12;
@@ -71,7 +73,7 @@ extern "C" {
 
     if (enable_d3d9on12)
     {
-      return D3DERR_INVALIDCALL;
+      return NULL;
     }
 
     IDirect3D9Ex* pDirect3D = nullptr;
