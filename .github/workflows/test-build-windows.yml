@@ -39,7 +39,7 @@ jobs:
         & "${Env:COMSPEC}" /s /c "`"${Env:VSDEVCMD}`" -arch=x86 -host_arch=x64 -no_logo && set" `
           | % { , ($_ -Split '=', 2) } `
           | % { [System.Environment]::SetEnvironmentVariable($_[0], $_[1]) }
-        meson --optimization 3 --debug  --backend vs2022 build-msvc-x86
+        meson --optimization 3 -DDEBUG=FULL --backend vs2022 build-msvc-x86
         msbuild -m build-msvc-x86/dxvk.sln
         
     - name: Upload artifacts (x86)
@@ -59,7 +59,7 @@ jobs:
         & "${Env:COMSPEC}" /s /c "`"${Env:VSDEVCMD}`" -arch=x64 -host_arch=x64 -no_logo && set" `
           | % { , ($_ -Split '=', 2) } `
           | % { [System.Environment]::SetEnvironmentVariable($_[0], $_[1]) }
-        meson --optimization 3 --debug --backend vs2022 build-msvc-x64
+        meson --optimization 3 -DDEBUG=FULL --backend vs2022 build-msvc-x64
         msbuild -m build-msvc-x64/dxvk.sln
         
     - name: Upload artifacts (amd64)
