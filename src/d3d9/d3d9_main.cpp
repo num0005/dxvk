@@ -37,6 +37,49 @@ extern "C" {
     return dxvk::CreateD3D9(true, ppDirect3D9Ex);
   }
 
+  typedef struct _D3D9ON12_ARGS
+  {
+    BOOL Enable9On12;
+    IUnknown *pD3D12Device;
+    IUnknown *ppD3D12Queues[MAX_D3D9ON12_QUEUES];
+    UINT NumQueues;
+    UINT NodeMask;
+  } D3D9ON12_ARGS;
+
+  DLLEXPORT HRESULT __stdcall Direct3DCreate9On12Ex(UINT SDKVersion, D3D9ON12_ARGS *pOverrideList, UINT NumOverrideEntries, IDirect3D9Ex** ppDirect3D9Ex) {
+    BOOL enable_d3d9on12 = FALSE;
+    for (int i = 0; i < NumOverrideEntries; i++)
+    {
+      enable_d3d9on12 = enable_d3d9on12 || pOverrideList[i].Enable9On12;
+    }
+
+    if (enable_d3d9on12)
+    {
+      return D3DERR_INVALIDCALL;
+    }
+
+    return dxvk::CreateD3D9(true, ppDirect3D9Ex); 
+  }
+  
+  DLLEXPORT IDirect3D9* __stdcall Direct3DCreate9On12(UINT SDKVersion, D3D9ON12_ARGS *pOverrideList, UINT NumOverrideEntries)
+  {
+    BOOL enable_d3d9on12 = FALSE;
+    for (int i = 0; i < NumOverrideEntries; i++)
+    {
+      enable_d3d9on12 = enable_d3d9on12 || pOverrideList[i].Enable9On12;
+    }
+
+    if (enable_d3d9on12)
+    {
+      return D3DERR_INVALIDCALL;
+    }
+
+    IDirect3D9Ex* pDirect3D = nullptr;
+    dxvk::CreateD3D9(false, &pDirect3D);
+
+    return pDirect3D;
+  }
+
   DLLEXPORT int __stdcall D3DPERF_BeginEvent(D3DCOLOR col, LPCWSTR wszName) {
     return dxvk::D3D9GlobalAnnotationList::Instance().BeginEvent(col, wszName);
   }
