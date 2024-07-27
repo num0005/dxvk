@@ -78,3 +78,20 @@ jobs:
         path: |
           build-msvc-x64\**\*.pdb
           build-msvc-x64\**\*.dll
+
+    - name: Build MSVC ARM64
+      shell: pwsh
+      run: |
+        & "${Env:COMSPEC}" /s /c "`"${Env:VSDEVCMD}`" -arch=ARM64 -host_arch=x64 -no_logo && set" `
+          | % { , ($_ -Split '=', 2) } `
+          | % { [System.Environment]::SetEnvironmentVariable($_[0], $_[1]) }
+        meson --buildtype release --backend vs2022 build-msvc-ARM64
+        msbuild -m build-msvc-ARM64/dxvk.sln
+
+    - name: Upload artifacts (ARM64)
+      uses: actions/upload-artifact@v4
+      with:
+        name: dxvk-${{ env.VERSION_NAME }}-msvc-ARM64-output
+        path: |
+          build-msvc-ARM64\**\*.pdb
+          build-msvc-ARM64\**\*.dll
